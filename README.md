@@ -11,7 +11,7 @@ Use Python 3.14 or newer and uv 0.11.2. From this repository's root:
 
 ```bash
 uv sync --frozen --extra test --no-install-project --no-build
-uv run --no-sync python -m pytest
+uv run --no-sync --no-build python -m pytest
 ```
 
 `uv.lock` pins and hashes the runtime and test dependencies from public PyPI.
