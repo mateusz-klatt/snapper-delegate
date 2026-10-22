@@ -1,0 +1,15 @@
+tests/
+.git
+.github/
+.venv/
+build/
+dist/
+**/*.egg-info/
+.pytest_cache/
+.coverage*
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+src/snapper_delegate/registration.py
+.dockerignore
+Dockerfile
