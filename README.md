@@ -35,8 +35,7 @@ administrators must configure the `SONAR_TOKEN` Actions secret for analysis.
 
 `requirements.txt` contains exact direct runtime pins. `requirements.lock`
 contains the universal, hashed binary resolution consumed by the Docker build.
-Its generated header records the original command from the Snapper checkout;
-from this repository, the equivalent command is:
+Regenerate the Docker runtime lock from this repository with:
 
 ```bash
 uv pip compile requirements.txt --python-version 3.14 --universal \
