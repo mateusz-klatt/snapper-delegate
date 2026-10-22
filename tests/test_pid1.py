@@ -2,6 +2,7 @@
 
 import asyncio
 import os
+import runpy
 import signal
 import subprocess
 import sys
@@ -682,6 +683,23 @@ def test_main_runs_async_pid1(monkeypatch: pytest.MonkeyPatch) -> None:
     assert pid1.main() == 0
     configure_file_logging.assert_called_once_with(os.environ)
     run_pid1.assert_awaited_once_with()
+
+
+def test_module_entrypoint_rejects_invalid_strict_configuration(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The executable module refuses invalid strict container configuration.
+
+    Given: Strict startup with an empty required model route,
+    When: Python executes the real module entrypoint,
+    Then: It exits with status one before attempting provider communication.
+    """
+    monkeypatch.setenv("SNAPPER_PID1_STRICT", "1")
+    monkeypatch.setenv("SNAPPER_DELEGATE_MODEL_ALIAS", "")
+    monkeypatch.delenv("SNAPPER_LOG_FILE", raising=False)
+    with pytest.raises(SystemExit) as raised:
+        runpy.run_path(pid1.__file__, run_name="__main__")
+    assert raised.value.code == 1
 
 
 def test_file_logging_uses_only_exact_model_log_path(

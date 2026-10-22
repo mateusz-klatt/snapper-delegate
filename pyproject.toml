@@ -19,7 +19,7 @@ Repository = "https://github.com/mateusz-klatt/snapper-delegate"
 Issues = "https://github.com/mateusz-klatt/snapper-delegate/issues"
 
 [project.optional-dependencies]
-test = ["pytest==9.1.1", "pytest-asyncio==1.4.0", "pytest-timeout==2.4.0"]
+test = ["pytest==9.1.1", "pytest-asyncio==1.4.0", "pytest-cov==7.1.0", "pytest-timeout==2.4.0"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -28,10 +28,18 @@ where = ["src"]
 dependencies = {file = ["requirements.txt"]}
 
 [tool.pytest.ini_options]
-addopts = "-q --tb=short --timeout=15"
+addopts = "-q --tb=short --timeout=15 --cov --cov-report=term-missing --cov-report=xml"
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 asyncio_default_test_loop_scope = "function"
 testpaths = ["tests"]
 pythonpath = ["src"]
 filterwarnings = ["error"]
+
+[tool.coverage.run]
+branch = true
+source = ["src/snapper_delegate"]
+relative_files = true
+
+[tool.coverage.report]
+show_missing = true

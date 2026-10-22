@@ -21,6 +21,15 @@ The test suite uses recorded fixtures and mocked transports. It runs independent
 of a Snapper checkout. Snapper's own test suite covers its managed-process
 registration adapter and backend integration.
 
+Tests measure line and branch coverage across the complete package and write
+`coverage.xml`. This report includes the optional registration adapter, whose
+backend integration tests run in Snapper rather than the standalone suite.
+The GitHub Actions CI runs the standalone tests on pushes to `master` or `main`
+and on pull requests, then submits the coverage and source analysis to the independent
+[SonarCloud project](https://sonarcloud.io/dashboard?id=mateusz-klatt_snapper-delegate).
+The workflow waits for its quality gate and fails when the gate fails. Repository
+administrators must configure the `SONAR_TOKEN` Actions secret for analysis.
+
 `requirements.txt` contains exact direct runtime pins. `requirements.lock`
 contains the universal, hashed binary resolution consumed by the Docker build.
 Its generated header records the original command from the Snapper checkout;
