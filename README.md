@@ -7,15 +7,18 @@ hold and resume control.
 
 ## Development
 
-Use Python 3.14 or newer. From this repository's root:
+Use Python 3.14 or newer and uv 0.11.2. From this repository's root:
 
 ```bash
-python -m venv .venv
-. .venv/bin/activate
-python -m pip install --require-hashes --only-binary=:all: -r requirements.lock
-python -m pip install -e '.[test]'
-python -m pytest
+uv sync --frozen --extra test --no-install-project --no-build
+uv run --no-sync python -m pytest
 ```
+
+`uv.lock` pins and hashes the runtime and test dependencies from public PyPI.
+The frozen setup installs only binary distributions and leaves the local project
+uninstalled; pytest loads its source directly through the configured Python path.
+Its runtime package versions match the Docker runtime lock. Refresh both locks
+with the commands below after changing runtime dependencies.
 
 The test suite uses recorded fixtures and mocked transports. It runs independently
 of a Snapper checkout. Snapper's own test suite covers its managed-process
@@ -38,6 +41,27 @@ from this repository, the equivalent command is:
 ```bash
 uv pip compile requirements.txt --python-version 3.14 --universal \
     --generate-hashes --only-binary=:all: --output-file requirements.lock
+```
+
+Then align the development lock with every runtime pin without adding duplicate
+constraints to package metadata:
+
+```bash
+python - <<'PY'
+import re
+import subprocess
+from pathlib import Path
+
+pins = re.findall(
+    r"^([A-Za-z0-9_.-]+==[^\s;\\]+)",
+    Path("requirements.lock").read_text(),
+    re.MULTILINE,
+)
+command = ["uv", "lock", "--default-index", "https://pypi.org/simple", "--python", "3.14"]
+for pin in pins:
+    command.extend(["--upgrade-package", pin])
+subprocess.run(command, check=True)
+PY
 ```
 
 ## Container
