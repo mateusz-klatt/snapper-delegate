@@ -7,7 +7,7 @@ hold and resume control.
 
 ## Development
 
-Use Python 3.14 or newer and uv 0.11.2. From this repository's root:
+Use Python 3.14 or newer and uv 0.13.6. From this repository's root:
 
 ```bash
 uv sync --frozen --extra test --no-install-project --no-build
