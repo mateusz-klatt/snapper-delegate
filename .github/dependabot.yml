@@ -18,6 +18,12 @@ updates:
     cooldown:
       default-days: 2
     open-pull-requests-limit: 5
+    ignore:
+      # The Python minor moves with an explicit runtime upgrade together with the superproject.
+      - dependency-name: "python"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
     labels:
       - "dependencies"
       - "docker"
