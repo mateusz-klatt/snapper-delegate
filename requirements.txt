@@ -1,5 +1,5 @@
 httpx[http2,socks]==0.28.1
 loguru==0.8.0
 mcp==2.3.0
-pydantic==2.14.3
+pydantic==2.14.4
 websockets==17.4
